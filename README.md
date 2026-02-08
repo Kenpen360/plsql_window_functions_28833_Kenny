@@ -90,7 +90,8 @@ Much of the critical intelligence remains inaccessible due to the noise in the s
 ### 5.5 Advanced Frame - Campaign Trend Analysis
 **Query Purpose:** Apply a 90-day moving average to distinguish sustained campaigns from isolated attacks.
 **Business Insight:** "The moving average smooths daily volatility to reveal the underlying operational tempo. The anomaly detection rule flags days with >150% of normal activity for immediate investigative response."
-![Moving Average](screenshots/window_avg.png)
+![Moving Average](screenshots/window_avg(a).png)
+![Moving Average](screenshots/window_avg(b).png)
 
 ## 6. Results Analysis
 
