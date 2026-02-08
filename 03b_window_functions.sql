@@ -3,7 +3,6 @@ SELECT
     actor_name,
     incident_count,
     sophistication_tier,
-    -- Multiple ranking methods for comparison
     ROW_NUMBER() OVER (PARTITION BY region ORDER BY incident_count DESC) as row_num_rank,
     RANK() OVER (PARTITION BY region ORDER BY incident_count DESC) as standard_rank,
     DENSE_RANK() OVER (PARTITION BY region ORDER BY incident_count DESC) as dense_rank,
@@ -133,4 +132,5 @@ SELECT
 FROM date_series ds
 LEFT JOIN daily_incidents di ON ds.date = di.incident_date
 WHERE ds.date >= (SELECT MIN(incident_date) FROM incidents)
+
 ORDER BY ds.date;
