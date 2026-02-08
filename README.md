@@ -35,34 +35,41 @@ Much of the critical intelligence remains inaccessible due to the noise in the s
 3.  **`incidents`** - Fact table linking actors to tools with timestamps and impact scores (`incident_id`, `actor_id` (FK), `tool_id` (FK), `incident_date`, `severity_score`, `target_sector`, `description`).
 
 ### Entity-Relationship Diagram:
+
 ![ER Diagram](screenshots/er_diagram.drawio.png)
-*The model shows a central `incidents` fact table. Each incident is **ATTRIBUTED_TO** a single `threat_actor` (1:N relationship), and **may UTILIZE** a known `tool` (N:1 relationship, optional).*
+
+The model shows a central `incidents` fact table. Each incident is **ATTRIBUTED_TO** a single `threat_actor` (1:N relationship), and **may UTILIZE** a known `tool` (N:1 relationship, optional).
 
 ## 4. Part A: SQL JOINs Implementation
 
 ### 4.1 INNER JOIN - Complete Incident Intelligence
 **Query Purpose:** Retrieve all confirmed incidents with complete actor and tool attribution details.
 **Business Insight:** "Cosmic Leopard (nation-state APAC actor) is most active with the highest-severity attacks. 22% of incidents have unknown tools, indicating gaps in our forensic capabilities."
+
 ![INNER JOIN Results](screenshots/join1_inner.png)
 
 ### 4.2 LEFT JOIN - Dormant Threat Detection
 **Query Purpose:** Identify threat actors with no recorded incidents (potential sleeper cells).
 **Business Insight:** "All 5 known threat actors in our database are active (0 dormant). This indicates either excellent intelligence collection or a critically high-threat environment requiring continuous monitoring."
+
 ![LEFT JOIN Results](screenshots/join2_left.png)
 
 ### 4.3 FULL JOIN - Tool Utilization Analysis
 **Query Purpose:** Analyze all tools in our catalog and their operational usage frequency.
 **Business Insight:** "All tools are used at least once; threat actors are diversifying their arsenal. PhishTrap Framework (social engineering) is most common, suggesting defensive focus should include user awareness training."
+
 ![FULL JOIN Results](screenshots/join3_full.png)
 
 ### 4.4 FULL OUTER JOIN - Complete Threat Landscape
 **Query Purpose:** Map all possible actor-tool relationships to identify intelligence gaps.
 **Business Insight:** "Reveals two incidents lack tool attribution. All nation-state actors use advanced tools, while criminal groups rely on commodity tools. This informs our countermeasure development priorities."
+
 ![FULL OUTER JOIN Results](screenshots/join4_outer.png)
 
 ### 4.5 SELF JOIN - Regional Coordination Analysis
 **Query Purpose:** Compare threat actors operating within the same geographical region.
 **Business Insight:** "Only the EMEA region has multiple actors (both criminal tier), suggesting potential turf wars or collaboration. Other regions are dominated by single actors, indicating territorial control."
+
 ![SELF JOIN Results](screenshots/join5_self.png)
 
 ## 5. Part B: Window Functions Implementation
@@ -70,26 +77,31 @@ Much of the critical intelligence remains inaccessible due to the noise in the s
 ### 5.1 Ranking Functions - Regional Threat Hierarchy
 **Query Purpose:** Rank threat actors within each operational region by their activity level using multiple ranking methods.
 **Business Insight:** "Cosmic Leopard ranks #1 in APAC with 3 incidents. Comparing `RANK()` and `DENSE_RANK()` reveals how to handle ties for analyst workload allocation."
+
 ![Ranking Functions](screenshots/window_rank.png)
 
 ### 5.2 Aggregate Window Functions - Threat Escalation Tracking
 **Query Purpose:** Calculate running totals and moving averages of threat severity to track landscape escalation.
 **Business Insight:** "The running severity total shows cumulative threat pressure building to 68 points by February. The 3-month moving average reveals an accelerating trend, confirming an escalation pattern."
+
 ![Aggregate Functions](screenshots/window_sum.png)
 
 ### 5.3 Navigation Functions - Activity Spike Detection
 **Query Purpose:** Perform month-over-month comparison using `LAG()` to detect and quantify spikes in malicious activity.
 **Business Insight:** "February shows a 50% growth in incidents from January. The `LAG()` function clearly reveals attack cycles, while `LEAD()` enables basic forecasting for proactive resource planning."
+
 ![Navigation Functions](screenshots/window_lag.png)
 
 ### 5.4 Distribution Functions - Threat Prioritization
 **Query Purpose:** Segment actors into priority quartiles using `NTILE(4)` to objectively allocate defensive resources.
 **Business Insight:** "`NTILE(4)` creates clear tiers: Tier 1 (Critical) contains only nation-state actors (Cosmic Leopard, Crimson Hydra) who cause 67% of total severity—a clear Pareto distribution in the threat landscape."
+
 ![Distribution Functions](screenshots/window_ntile.png)
 
 ### 5.5 Advanced Frame - Campaign Trend Analysis
 **Query Purpose:** Apply a 90-day moving average to distinguish sustained campaigns from isolated attacks.
 **Business Insight:** "The moving average smooths daily volatility to reveal the underlying operational tempo. The anomaly detection rule flags days with >150% of normal activity for immediate investigative response."
+
 ![Moving Average](screenshots/window_avg(a).png)
 ![Moving Average](screenshots/window_avg(b).png)
 
