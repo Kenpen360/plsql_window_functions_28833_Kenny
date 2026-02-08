@@ -35,7 +35,7 @@ Much of the critical intelligence remains inaccessible due to the noise in the s
 3.  **`incidents`** - Fact table linking actors to tools with timestamps and impact scores (`incident_id`, `actor_id` (FK), `tool_id` (FK), `incident_date`, `severity_score`, `target_sector`, `description`).
 
 ### Entity-Relationship Diagram:
-![ER Diagram](screenshots/er_diagram.png)
+![ER Diagram](screenshots/er_diagram.drawio.png)
 *The model shows a central `incidents` fact table. Each incident is **ATTRIBUTED_TO** a single `threat_actor` (1:N relationship), and **may UTILIZE** a known `tool` (N:1 relationship, optional).*
 
 ## 4. Part A: SQL JOINs Implementation
